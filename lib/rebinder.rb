@@ -34,6 +34,18 @@ class UnboundMethod
     ret
   end
   alias • compose
+
+  def partial_application(arg)
+    meth = self
+    meth.owner.send(:define_method, :__curry) { |*args|
+      meth.✈(self).◊(arg, *args)
+    }
+    ret = meth.owner.instance_method(:__curry)
+    meth.owner.send :remove_method, :__curry
+    ret
+  end
+  alias ∂ partial_application
+  
 end 
 
 class Module
@@ -78,9 +90,15 @@ if __FILE__ == $0
 
     def test_✈
       add = 5.method(:+)
-       
       assert_equal [6,7,8],    [1,2,3].map(&add)
       assert_equal [11,12,13], [1,2,3].map(&add.✈(10))
+    end
+
+    def test_∂
+      
+      add = Fixnum.☃.+
+      add3 = add.∂(3)
+      assert_equal 7, add3.☏(4)
     end 
     
   end 
