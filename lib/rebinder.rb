@@ -5,24 +5,29 @@ class Method
     unbind.✈(*args,&block)
   end
   alias ✈ rebind
+  alias ◊ call
 end
+
+class Proc
+  alias ◊ call
+end 
 
 class UnboundMethod
   def to_proc
-    proc { |obj| self.✈(obj).call }
+    proc { |obj| self.✈(obj).◊ }
   end 
 
   alias ✈ bind
 
   def apply(obj)
-    ✈(obj).call
+    ✈(obj).◊
   end
   alias ☏ apply
 
   def compose(meth2)
     meth1 = self
     meth1.owner.send(:define_method, :__composition) {
-      meth2.✈(meth1.✈(self).call).call
+      meth2.✈(meth1.✈(self).◊).◊
     }
     ret = meth1.owner.instance_method(:__composition)
     meth1.owner.send :remove_method, :__composition
@@ -32,9 +37,7 @@ class UnboundMethod
 end 
 
 class Module
-
   class BadIdeaProxy < BasicObject
-
     def initialize(obj)
       @obj = obj
     end
@@ -42,22 +45,17 @@ class Module
     def method_missing(s)
       @obj.instance_method(s)
     end
-
   end
 
   def snowman(arg=nil)
     return instance_method(arg) if arg
     BadIdeaProxy.new(self)
   end
-
   alias ☃ snowman
-
 end
 
 if __FILE__ == $0
-
   require 'minitest/autorun'
-
   class OmgTest < MiniTest::Unit::TestCase
     def setup
       @id = Object.☃.object_id
