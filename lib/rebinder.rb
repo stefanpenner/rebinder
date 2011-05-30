@@ -25,18 +25,21 @@ class Module
     def initialize(obj)
       @obj = obj
     end
-    
+
     def method_missing(s)
       @obj.instance_method(s)
-    end 
+    end
 
-  end 
+  end
 
-  def ☃
+  def snowman(arg=nil)
+    return instance_method(arg) if arg
     BadIdeaProxy.new(self)
-  end 
+  end
 
-end 
+  alias ☃ snowman
+
+end
 
 # id = Object.☃.object_id
 #  #=> #<UnboundMethod: Object(Kernel)#object_id>
@@ -46,3 +49,12 @@ end
 #
 # id.☏ :lmao
 #  #=> 507048
+#
+# add = 5.method(:+)
+#
+# [1,2,3].map(&add)
+# #=> [6,7,8]
+#
+# [1,2,3].map(&add.✈ 10)
+# #=> [11,12,13]
+
