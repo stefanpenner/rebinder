@@ -95,7 +95,6 @@ if __FILE__ == $0
     end
 
     def test_∂
-      
       add = Fixnum.☃.+
       add3 = add.∂(3)
       assert_equal 7, add3.☏(4)
