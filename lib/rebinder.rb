@@ -57,13 +57,11 @@ end
 if __FILE__ == $0
   require 'minitest/autorun'
   class OmgTest < MiniTest::Unit::TestCase
-    def setup
-      @id = Object.☃.object_id
-    end 
 
     def test_☃
-      assert_equal "#<UnboundMethod: Object(Kernel)#object_id>", @id.inspect
-      assert_equal [3,5,7], [1,2,3].map(&@id)
+      id = Object.☃.object_id
+      assert_equal "#<UnboundMethod: Object(Kernel)#object_id>", id.inspect
+      assert_equal [3,5,7], [1,2,3].map(&id)
     end
 
     def test_☏
