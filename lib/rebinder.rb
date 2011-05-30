@@ -6,6 +6,7 @@ class Method
   end
   alias ✈ rebind
   alias ◊ call
+  alias ⇧ owner
 end
 
 class Proc
@@ -18,6 +19,7 @@ class UnboundMethod
   end 
 
   alias ✈ bind
+  alias ⇧ owner
 
   def apply(obj)
     ✈(obj).◊
@@ -26,22 +28,22 @@ class UnboundMethod
 
   def compose(meth2)
     meth1 = self
-    meth1.owner.send(:define_method, :__composition) {
+    meth1.⇧.send(:define_method, :__composition) {
       meth2.✈(meth1.✈(self).◊).◊
     }
-    ret = meth1.owner.instance_method(:__composition)
-    meth1.owner.send :remove_method, :__composition
+    ret = meth1.⇧.☃.__composition
+    meth1.⇧.send :remove_method, :__composition
     ret
   end
   alias • compose
 
   def partial_application(arg)
     meth = self
-    meth.owner.send(:define_method, :__curry) { |*args|
+    meth.⇧.send(:define_method, :__curry) { |*args|
       meth.✈(self).◊(arg, *args)
     }
-    ret = meth.owner.instance_method(:__curry)
-    meth.owner.send :remove_method, :__curry
+    ret = meth.⇧.☃.__curry
+    meth.⇧.send :remove_method, :__curry
     ret
   end
   alias ∂ partial_application
