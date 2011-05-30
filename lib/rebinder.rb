@@ -77,15 +77,15 @@ if __FILE__ == $0
       reverse_upcase = reverse.•(upcase)
       assert_equal "OMG", reverse_upcase.☏("gmo")
     end 
+
+    def test_✈
+      add = 5.method(:+)
+       
+      assert_equal [6,7,8],    [1,2,3].map(&add)
+      assert_equal [11,12,13], [1,2,3].map(&add.✈(10))
+    end 
     
   end 
 end 
 
-# add = 5.method(:+)
-#
-# [1,2,3].map(&add)
-# #=> [6,7,8]
-#
-# [1,2,3].map(&add.✈ 10)
-# #=> [11,12,13]
 
