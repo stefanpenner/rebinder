@@ -16,6 +16,17 @@ class UnboundMethod
     bind(obj).call
   end
   alias ☏ apply
+
+  def compose(meth2)
+    meth1 = self
+    meth1.owner.send(:define_method, :__composition) {
+      meth2.bind(meth1.bind(self).call).call
+    }
+    ret = meth1.owner.instance_method(:__composition)
+    meth1.owner.send :remove_method, :__composition
+    ret
+  end
+  alias • compose
 end 
 
 class Module
@@ -41,15 +52,35 @@ class Module
 
 end
 
-# id = Object.☃.object_id
-#  #=> #<UnboundMethod: Object(Kernel)#object_id>
-#  
-# [:omg, :wtf, :lol].map(&id)
-#  #=> [507368, 507528, 507688] 
-#
-# id.☏ :lmao
-#  #=> 507048
-#
+if __FILE__ == $0
+
+  require 'minitest/autorun'
+
+  class OmgTest < MiniTest::Unit::TestCase
+    def setup
+      @id = Object.☃.object_id
+    end 
+
+    def test_☃
+      assert_equal "#<UnboundMethod: Object(Kernel)#object_id>", @id.inspect
+      assert_equal [3,5,7], [1,2,3].map(&@id)
+    end
+
+    def test_☏
+      upcase = String.☃.upcase
+      assert_equal "ZOMFG", upcase.☏("zomfg")
+    end
+
+    def test_•
+      upcase  = String.☃.upcase
+      reverse = String.☃.reverse
+      reverse_upcase = reverse.•(upcase)
+      assert_equal "OMG", reverse_upcase.☏("gmo")
+    end 
+    
+  end 
+end 
+
 # add = 5.method(:+)
 #
 # [1,2,3].map(&add)
