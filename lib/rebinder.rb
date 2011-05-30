@@ -2,25 +2,27 @@
 
 class Method
   def rebind(*args,&block)
-    unbind.bind(*args,&block)
+    unbind.✈(*args,&block)
   end
   alias ✈ rebind
 end
 
 class UnboundMethod
   def to_proc
-    proc { |obj| self.bind(obj).call }
+    proc { |obj| self.✈(obj).call }
   end 
 
+  alias ✈ bind
+
   def apply(obj)
-    bind(obj).call
+    ✈(obj).call
   end
   alias ☏ apply
 
   def compose(meth2)
     meth1 = self
     meth1.owner.send(:define_method, :__composition) {
-      meth2.bind(meth1.bind(self).call).call
+      meth2.✈(meth1.✈(self).call).call
     }
     ret = meth1.owner.instance_method(:__composition)
     meth1.owner.send :remove_method, :__composition
