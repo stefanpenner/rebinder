@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
 
+class Object
+  alias ⇾ send
+end    
+
 class Method
   def rebind(*args,&block)
     unbind.✈(*args,&block)
@@ -28,22 +32,22 @@ class UnboundMethod
 
   def compose(meth2)
     meth1 = self
-    meth1.⇧.send(:define_method, :__composition) {
+    meth1.⇧.⇾(:define_method, :__composition) {
       meth2.✈(meth1.✈(self).◊).◊
     }
     ret = meth1.⇧.☃.__composition
-    meth1.⇧.send :remove_method, :__composition
+    meth1.⇧.⇾ :remove_method, :__composition
     ret
   end
   alias • compose
 
   def partial_application(arg)
     meth = self
-    meth.⇧.send(:define_method, :__curry) { |*args|
+    meth.⇧.⇾(:define_method, :__curry) { |*args|
       meth.✈(self).◊(arg, *args)
     }
     ret = meth.⇧.☃.__curry
-    meth.⇧.send :remove_method, :__curry
+    meth.⇧.⇾ :remove_method, :__curry
     ret
   end
   alias ∂ partial_application
