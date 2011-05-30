@@ -11,6 +11,11 @@ class UnboundMethod
   def to_proc
     proc { |obj| self.bind(obj).call }
   end 
+
+  def apply(obj)
+    bind(obj).call
+  end
+  alias ☏ apply
 end 
 
 class Module
@@ -38,3 +43,6 @@ end
 #  
 # [:omg, :wtf, :lol].map(&id)
 #  #=> [507368, 507528, 507688] 
+#
+# id.☏ :lmao
+#  #=> 507048
